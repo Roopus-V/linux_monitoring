@@ -6,10 +6,12 @@ int main(){
 //os info
 	char line[256];
 	FILE *fp = fopen("/etc/os-release", "r");
-	if(fgets(line, sizeof(line), fp) != NULL){
-		printf("%s", line);
+	if(fp != NULL){
+		if(fgets(line, sizeof(line), fp) != NULL){
+			printf("%s", line);
+		}
+		fclose(fp);
 	}
-	fclose(fp);
 //
 	printf("Kernel: ");
 	fflush(stdout);
