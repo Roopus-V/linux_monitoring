@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+
 int main(){
 	printf("=========================================================SYSTEM-MONITORING====================================================\n");
 	printf("\n");
@@ -7,8 +9,11 @@ int main(){
 	char line[256];
 	FILE *fp = fopen("/etc/os-release", "r");
 	if(fp != NULL){
-		if(fgets(line, sizeof(line), fp) != NULL){
-			printf("%s", line);
+		while(fgets(line, sizeof(line), fp) != NULL){
+			if(strncmp(line, "PRETTY_NAME=", 12) == 0){
+				printf("%s", line);
+				break;
+			}
 		}
 		fclose(fp);
 	}
