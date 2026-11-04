@@ -1,12 +1,16 @@
 #include<stdio.h>
 #include<stdlib.h>
 int main(){
-	char s[]= "Ubuntu";
 	printf("=========================================================SYSTEM-MONITORING====================================================\n");
 	printf("\n");
-	printf("Operating System: %s \n",s);
-	
-	system("cat /etc/os-release | head -n 1");
+//os info
+	char line[256];
+	FILE *fp = fopen("/etc/os-release", "r");
+	if(fgets(line, sizeof(line), fp) != NULL){
+		printf("%s", line);
+	}
+	fclose(fp);
+//
 	printf("Kernel: ");
 	fflush(stdout);
 	system("uname -s");
