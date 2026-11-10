@@ -32,20 +32,10 @@ int main(){
 	printf("=========================================================SYSTEM-MONITORING====================================================\n");
 	printf("\n");
 
-	
-	//os info
-//	char line[256];
-//	FILE *fp = fopen("/etc/os-release", "r");
-//	if(fp != NULL){
-//	}
-	
 	os_info("PRETTY NAME","/etc/os-release");
 	proc_info("HOSTNAME","/proc/sys/kernel/hostname");
 	proc_info("OS TYPE","/proc/sys/kernel/ostype");
 	proc_info("OS RELEASE","/proc/sys/kernel/osrelease");
-	
-
-
 
 	printf("\n=============================================================================================================================\n");
 	return 0;
