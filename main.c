@@ -58,6 +58,23 @@ void cpu_info(char label[], char path[]){
 		fclose(fp);
 	}
 }
+void mem_info(char label[], char path[]){
+	char line[256];
+	FILE *fp = fopen(path, "r");
+	if(fp != NULL){
+		while(fgets(line, sizeof(line), fp) != NULL){
+			if(strncmp(line, "MemTotal:", 9) == 0)
+			{
+				long total_kb;
+				sscanf(line, "MemTotal: %ld KB", &total_kb);
+				double gb = total_kb / (1024.0 * 1024.0 );
+				printf("%s: %.2lf GB",label, gb);
+			}
+		}
+		fclose(fp);
+	}
+}
+
 int main(){
 	printf("=========================================================SYSTEM-MONITORING====================================================\n");
 	printf("\n");
@@ -66,8 +83,9 @@ int main(){
 	proc_info("HOSTNAME", "/proc/sys/kernel/hostname");	//calling function to display info from proc
 	proc_info("OS TYPE", "/proc/sys/kernel/ostype");
 	proc_info("OS RELEASE", "/proc/sys/kernel/osrelease");
-	uptime_info("Raw Uptime", "/proc/uptime");
-	cpu_info("model name", "/proc/cpuinfo");
+	uptime_info("Raw Uptime", "/proc/uptime"); 		//calling function to display system uptime
+	cpu_info("Model name", "/proc/cpuinfo");		//calling function to display system cpuinfo
+	mem_info("Total Memory", "/proc/meminfo");		//calling function to display system
 
 
 	printf("\n=============================================================================================================================\n");
