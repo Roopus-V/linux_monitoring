@@ -60,17 +60,30 @@ void cpu_info(char label[], char path[]){
 }
 void mem_info(char label[], char path[]){
 	char line[256];
+	long total_kb;
+	long total_avail_kb;
+	double gb;
+	double avail_gb;
+	double mb = 1024.0;
 	FILE *fp = fopen(path, "r");
 	if(fp != NULL){
 		while(fgets(line, sizeof(line), fp) != NULL){
-			if(strncmp(line, "MemTotal:", 9) == 0)
+			if(strncmp(line, "MemTotal:", 9) == 0)		    //to display total RAM size
 			{
-				long total_kb;
-				sscanf(line, "MemTotal: %ld KB", &total_kb);
-				double gb = total_kb / (1024.0 * 1024.0 );
-				printf("%s: %.2lf GB",label, gb);
+				sscanf(line, "MemTotal: %ld kB", &total_kb);
+				gb = total_kb / (mb * mb );
+				printf("%s: %.2lf GB", label, gb);
+			}
+			else if(strncmp(line, "MemAvailable:", 13) == 0){    //to display free memory available
+				sscanf(line, "MemAvailable: %ld kB", &total_avail_kb);
+				avail_gb = total_avail_kb / (mb * mb );
+				printf("\nMemory Available: %.2lf GB", avail_gb);
+			
+				break;				//to exit loop
 			}
 		}
+		printf("\nMemory: %.2lf/%.2lf GB\n",(gb - avail_gb), gb);
+
 		fclose(fp);
 	}
 }
