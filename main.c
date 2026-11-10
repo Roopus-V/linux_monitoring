@@ -60,10 +60,10 @@ void cpu_info(char label[], char path[]){
 }
 void mem_info(char label[], char path[]){
 	char line[256];
-	long total_kb;
-	long total_avail_kb;
-	double gb;
-	double avail_gb;
+	long total_kb = 0;
+	long total_avail_kb = 0;
+	double gb = 0;
+	double avail_gb = 0;
 	double mb = 1024.0;
 	FILE *fp = fopen(path, "r");
 	if(fp != NULL){
