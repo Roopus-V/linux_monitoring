@@ -79,13 +79,31 @@ void mem_info(char label[], char path[]){
 				avail_gb = total_avail_kb / (mb * mb );
 				printf("\nMemory Available: %.2lf GB", avail_gb);
 			
-				break;				//to exit loop
+				break;					     //to exit loop
 			}
 		}
-		printf("\nMemory: %.2lf/%.2lf GB\n",(gb - avail_gb), gb);
+									     //to display used memory in gb and %
+		double used_mem = gb -avail_gb;
+		double used_mem_per = (used_mem / gb) * 100;
+		printf("\nMemory: %.2lf/%.2lf GB [Used: %.2lf%%] \n",used_mem, gb, used_mem_per);
 
 		fclose(fp);
 	}
+}
+void cpu_time_info(char label[], char path[]){				     //to display cpu usage
+	char line[256];
+	FILE *fp = fopen(path, "r");
+		long user=0, nice=0, system=0, idle=0, iowait=0, irq=0, softirq=0, steal=0;
+	if(fp != NULL){
+		if(fscanf(fp, "cpu %ld %ld %ld %ld %ld %ld %ld %ld", &user, &nice, &system, &idle, &iowait, &irq, &softirq, &steal) == 8){
+			long idle_time = idle + iowait;			     //to cal total idle cpu time
+			long total_time = user + nice + system + idle_time + irq + softirq + steal;// to cal total cpu usage
+			long cpu_active = total_time - idle_time;	     //to cal cpu active time
+			double cpu_per = ((double)cpu_active / total_time) * 100;	     //to cal cpu active time in %
+			printf("CPU Usage: %.2lf", cpu_per);
+		}
+		fclose(fp);
+	}	
 }
 
 int main(){
@@ -99,7 +117,7 @@ int main(){
 	uptime_info("Raw Uptime", "/proc/uptime"); 		//calling function to display system uptime
 	cpu_info("Model name", "/proc/cpuinfo");		//calling function to display system cpuinfo
 	mem_info("Total Memory", "/proc/meminfo");		//calling function to display system
-
+	cpu_time_info("CPU Time", "/proc/stat");
 
 	printf("\n=============================================================================================================================\n");
 	return 0;
