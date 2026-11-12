@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<sys/statvfs.h>
 
 void proc_info(char label[], char path[]){
 	char line[256];
@@ -99,11 +100,21 @@ void cpu_time_info(char label[], char path[]){				     //to display cpu usage
 			long total_time = user + nice + system + idle_time + irq + softirq + steal;// to cal total cpu usage
 			long cpu_active = total_time - idle_time;	     //to cal cpu active time
 			double cpu_per = ((double)cpu_active / total_time) * 100;	     //to cal cpu active time in %
-			printf("%s: %.2lf%%",label, cpu_per);
+			printf("%s: %.2lf%%\n",label, cpu_per);
 		}
 		fclose(fp);
 	}	
 }
+void disk_info(char label[], char path[]){				     //to display storage (hard disk) info
+	struct statvfs disk;
+	if(statvfs(path, &disk) ==0){
+		double gb = 1024.0 * 1024.0 * 1024.0;			     //Bytes=> kB => GB
+		double total_gb = (double)(disk.f_blocks * disk.f_frsize) / gb;//Total storage in GB
+		double avail_gb = (double)(disk.f_bavail * disk.f_frsize) / gb;
+		printf("%s: [Total Size: %.2lfGB, Used: %.2lfGB, Available storage: %.2lfGB]\n",label, total_gb,(total_gb-avail_gb), avail_gb);
+	}
+}
+
 
 int main(){
 	printf("=========================================================SYSTEM-MONITORING====================================================\n");
@@ -117,6 +128,7 @@ int main(){
 	cpu_info("Model name", "/proc/cpuinfo");		//calling function to display system cpuinfo
 	mem_info("Total Memory", "/proc/meminfo");		//calling function to display system
 	cpu_time_info("CPU Usage", "/proc/stat");
+	disk_info("Disk info","/");
 
 	printf("\n=============================================================================================================================\n");
 	return 0;
