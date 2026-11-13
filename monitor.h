@@ -8,5 +8,5 @@
 	void mem_info(char label[], char path[]);
 	void cpu_time_info(char label[], char path[]);
 	void disk_info(char label[], char path[]);
-
+	void process_info(char label[], char path[]);
 #endif

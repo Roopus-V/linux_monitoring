@@ -17,7 +17,7 @@ int main(){
 	mem_info("Total Memory", "/proc/meminfo");		//calling function to display system
 	cpu_time_info("CPU Usage", "/proc/stat");
 	disk_info("Disk info","/");
-
+	process_info("Directory","/proc");
 	printf("\n=============================================================================================================================\n");
 	return 0;
 }
