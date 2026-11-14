@@ -19,12 +19,11 @@ void process_info(char label[], char path[]){
 	if(dir != NULL){
 		struct dirent *entry;
 		int count = 0;
-		printf("No  PID:        Name:\n");
 		while((entry = readdir(dir)) != NULL){
 			if(count == 10) break;
 			if(is_pid(entry->d_name)){			
 				count++;
-				printf("%d %s : %s",count, label, entry->d_name);
+				printf("%d\t %s : %s",count, label, entry->d_name);
 				char comm[256];
 				snprintf(comm, sizeof(comm), "/proc/%s/comm", entry->d_name);
 				FILE *fp = fopen(comm, "r");
