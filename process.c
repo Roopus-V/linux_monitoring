@@ -20,7 +20,17 @@ void process_info(char label[], char path[]){
 		struct dirent *entry;
 		while((entry = readdir(dir)) != NULL){
 			if(is_pid(entry->d_name)){			
-				printf("%s :~ %s\n",label, entry->d_name);
+				printf("%s :~ %s",label, entry->d_name);
+				char comm[256];
+				snprintf(comm, sizeof(comm), "/proc/%s/comm", entry->d_name);
+				FILE *fp = fopen(comm, "r");
+				if(fp != NULL){
+					char line[256];
+					if(fgets(line, sizeof(line), fp) != NULL){
+						printf(" Name: %s",line);
+					}
+					fclose(fp);
+				}
 			}
 		}
 		closedir(dir);
