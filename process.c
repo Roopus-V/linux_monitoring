@@ -1,14 +1,29 @@
 #include<stdio.h>
 #include<dirent.h>
+#include<ctype.h>
+#include<string.h>
 #include "monitor.h"
-
+int is_pid(const char *str){//const so no changes can made in the str	//passing *memory address where the string starts(lives)
+	int len = strlen(str);
+	if(str == NULL || *str == '\0') return 0;
+		
+	for(int i=0; i<len; i++){
+		if(!isdigit(str[i])){
+			return 0;				//found a letter(non-digit)
+		}
+	}
+	return 1;						//found a digit
+}
 void process_info(char label[], char path[]){
 	DIR *dir = opendir(path);
 	if(dir != NULL){
 		struct dirent *entry;
 		while((entry = readdir(dir)) != NULL){
-			printf("%s :~ %s\n",label, entry->d_name);
+			if(is_pid(entry->d_name)){			
+				printf("%s :~ %s\n",label, entry->d_name);
+			}
 		}
 		closedir(dir);
 	}
 }
+

@@ -9,4 +9,5 @@
 	void cpu_time_info(char label[], char path[]);
 	void disk_info(char label[], char path[]);
 	void process_info(char label[], char path[]);
+	int is_pid(const char *str);		//related ti process_info (process.c)
 #endif
