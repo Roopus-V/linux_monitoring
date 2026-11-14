@@ -14,6 +14,37 @@ int is_pid(const char *str){//const so no changes can made in the str	//passing 
 	}
 	return 1;						//found a digit
 }
+
+void combine(const char *pid){
+				char comm[256];
+				snprintf(comm, sizeof(comm), "/proc/%s/comm", pid);
+				FILE *fp = fopen(comm, "r");
+				if(fp != NULL){
+					char line[256];
+					if(fgets(line, sizeof(line), fp) != NULL){
+						printf(" Name: %s",line);
+					}
+					fclose(fp);
+				}
+				
+}
+void status(const char *pid){
+				char status[256];
+				snprintf(status, sizeof(status), "/proc/%s/status", pid);
+				FILE *fp = fopen(status, "r");
+				if(fp != NULL){
+					char line[256];
+					while(fgets(line, sizeof(line), fp) != NULL){
+						if(strncmp(line, "State:", 6) == 0){
+							printf(" %s",line);
+							break;
+						}
+					}
+					fclose(fp);
+				}
+				
+}
+
 void process_info(char label[], char path[]){
 	DIR *dir = opendir(path);
 	if(dir != NULL){
@@ -24,16 +55,8 @@ void process_info(char label[], char path[]){
 			if(is_pid(entry->d_name)){			
 				count++;
 				printf("%d\t %s : %s",count, label, entry->d_name);
-				char comm[256];
-				snprintf(comm, sizeof(comm), "/proc/%s/comm", entry->d_name);
-				FILE *fp = fopen(comm, "r");
-				if(fp != NULL){
-					char line[256];
-					if(fgets(line, sizeof(line), fp) != NULL){
-						printf(" Name: %s",line);
-					}
-					fclose(fp);
-				}
+				combine(entry->d_name); 
+				status(entry->d_name); 
 			}
 		}
 		closedir(dir);
