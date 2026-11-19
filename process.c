@@ -4,8 +4,8 @@
 #include<string.h>
 #include "monitor.h"
 int is_pid(const char *str){//const so no changes can made in the str	//passing *memory address where the string starts(lives)
-	int len = strlen(str);
 	if(str == NULL || *str == '\0') return 0;
+	int len = strlen(str);
 		
 	for(int i=0; i<len; i++){
 		if(!isdigit(str[i])){
